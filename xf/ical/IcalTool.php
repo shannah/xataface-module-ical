@@ -232,7 +232,7 @@ class xf_ical_IcalTool {
         $data = $this->buildFeedItemData($record,$query);
         $item = new StdClass();
         $item->title = $data['title'];
-        $item->link = $data['link'];
+        $item->link = $record->getPublicLink();
         $item->description = $data['description'];
         //optional
         //item->descriptionTruncSize = 500;
@@ -242,10 +242,13 @@ class xf_ical_IcalTool {
         $item->dateend = $data['dateend'];
         $item->location = $data['location'];
         $item->uid = $record->getId();
+        
         $del = $record->_table->getDelegate();
         if ( isset($del) and method_exists($del, 'getIcalUid') ){
             $item->uid = $del->getIcalUid($record);
         }
+        $item->url = $record->getPublicLink();
+        
         $item->source = $data['source'];
         $item->author = $data['author'];
         return $item;
@@ -359,6 +362,7 @@ class xf_ical_IcalTool {
         }
         $vevent->setProperty("summary",$item->title);
         $vevent->setProperty("description",$item->description);
+        $vevent->setProperty("url", $item->link);
         $vevent->setUid($item->uid);
     }
 
