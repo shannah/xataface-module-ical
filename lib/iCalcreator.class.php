@@ -9104,6 +9104,9 @@ class iCalUtilityFunctions {
       default:
         $pos = 0;
         $specChars = array( 'n', 'N', 'r', ',', ';' );
+        if ( PEAR::isError($string) ){
+            throw new Exception($string->getMessage());
+        }
         while( isset( $string[$pos] )) {
           if( FALSE === ( $pos = strpos( $string, "\\", $pos )))
             break;
